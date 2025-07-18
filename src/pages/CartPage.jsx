@@ -1,29 +1,15 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag } from "lucide-react";
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import { FaStarHalfAlt } from "react-icons/fa";
+import {
+  Trash2,
+  Plus,
+  Minus,
+  ArrowLeft,
+  ShoppingBag,
+  Star,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import ConfirmModal from "../components/Modal/ConfirmModal";
-
-const StarRating = ({ rating }) => {
-  const full = Math.floor(rating);
-  const half = rating - full >= 0.5;
-  const empty = 5 - full - (half ? 1 : 0);
-
-  return (
-    <div className="flex">
-      {[...Array(full)].map((_, i) => (
-        <AiFillStar key={i} className="text-yellow-400" />
-      ))}
-      {half && <FaStarHalfAlt className="text-yellow-400" />}
-      {[...Array(empty)].map((_, i) => (
-        <AiOutlineStar key={i + full + 1} className="text-yellow-400" />
-      ))}
-    </div>
-  );
-};
 
 const CartPage = () => {
   const {
@@ -40,7 +26,7 @@ const CartPage = () => {
     title: "",
     message: "",
     onConfirm: () => {},
-    type: "warning"
+    type: "warning",
   });
 
   const handleQuantityDecrease = (item) => {
@@ -50,7 +36,7 @@ const CartPage = () => {
         title: "Remove Item",
         message: `Are you sure you want to remove "${item.name}" from your cart?`,
         onConfirm: () => updateQuantity(item.id, item.quantity - 1),
-        type: "warning"
+        type: "warning",
       });
     } else {
       updateQuantity(item.id, item.quantity - 1);
@@ -63,7 +49,7 @@ const CartPage = () => {
       title: "Remove Item",
       message: `Are you sure you want to remove "${item.name}" from your cart? This action cannot be undone.`,
       onConfirm: () => removeFromCart(item.id),
-      type: "danger"
+      type: "danger",
     });
   };
 
@@ -73,7 +59,7 @@ const CartPage = () => {
       title: "Clear Cart",
       message: `Are you sure you want to remove all ${totalItems} items from your cart? This action cannot be undone.`,
       onConfirm: () => clearCart(),
-      type: "danger"
+      type: "danger",
     });
   };
 
@@ -115,7 +101,7 @@ const CartPage = () => {
               <p className="text-orange-100">{totalItems} items in your cart</p>
             </div>
             <Link
-              to="/"
+              to="/menu"
               className="flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-lg hover:bg-white/30 transition-colors"
             >
               <ArrowLeft size={20} />
@@ -140,9 +126,12 @@ const CartPage = () => {
 
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-800">{item.name}</h3>
-                  <StarRating rating={item.rating} />
+                  <div className="flex items-center gap-1 text-yellow-500 text-sm">
+                    <Star size={16} fill="#facc15" stroke="#facc15" />
+                    <span className="text-gray-700">{item.rating}</span>
+                  </div>
                   <p className="text-sm text-gray-600">
-                    {item.mealType.join(", ")}
+                    {item.mealType?.join(", ")}
                   </p>
                 </div>
 
@@ -170,7 +159,7 @@ const CartPage = () => {
                 {/* Subtotal */}
                 <div className="text-right min-w-[80px]">
                   <p className="font-bold text-gray-800">
-                    Rs. {(item.caloriesPerServing * item.quantity)}
+                    Rs. {item.caloriesPerServing * item.quantity}
                   </p>
                 </div>
 

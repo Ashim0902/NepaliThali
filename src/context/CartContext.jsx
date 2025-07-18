@@ -11,10 +11,12 @@ const initialState = {
 const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_TO_CART": {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
-      
+      const existingItem = state.items.find(
+        (item) => item.id === action.payload.id
+      );
+
       if (existingItem) {
-        const updatedItems = state.items.map(item =>
+        const updatedItems = state.items.map((item) =>
           item.id === action.payload.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
@@ -36,32 +38,33 @@ const cartReducer = (state, action) => {
     }
 
     case "REMOVE_FROM_CART": {
-      const item = state.items.find(item => item.id === action.payload.id);
+      const item = state.items.find((item) => item.id === action.payload.id);
       if (!item) return state;
 
       return {
         ...state,
-        items: state.items.filter(item => item.id !== action.payload.id),
+        items: state.items.filter((item) => item.id !== action.payload.id),
         totalItems: state.totalItems - item.quantity,
-        totalPrice: state.totalPrice - (item.caloriesPerServing * item.quantity),
+        totalPrice: state.totalPrice - item.caloriesPerServing * item.quantity,
       };
     }
 
     case "UPDATE_QUANTITY": {
-      const item = state.items.find(item => item.id === action.payload.id);
+      const item = state.items.find((item) => item.id === action.payload.id);
       if (!item) return state;
 
       if (action.payload.quantity <= 0) {
         return {
           ...state,
-          items: state.items.filter(item => item.id !== action.payload.id),
+          items: state.items.filter((item) => item.id !== action.payload.id),
           totalItems: state.totalItems - item.quantity,
-          totalPrice: state.totalPrice - (item.caloriesPerServing * item.quantity),
+          totalPrice:
+            state.totalPrice - item.caloriesPerServing * item.quantity,
         };
       }
 
       const quantityDiff = action.payload.quantity - item.quantity;
-      const updatedItems = state.items.map(item =>
+      const updatedItems = state.items.map((item) =>
         item.id === action.payload.id
           ? { ...item, quantity: action.payload.quantity }
           : item
@@ -71,7 +74,7 @@ const cartReducer = (state, action) => {
         ...state,
         items: updatedItems,
         totalItems: state.totalItems + quantityDiff,
-        totalPrice: state.totalPrice + (item.caloriesPerServing * quantityDiff),
+        totalPrice: state.totalPrice + item.caloriesPerServing * quantityDiff,
       };
     }
 
@@ -84,7 +87,10 @@ const cartReducer = (state, action) => {
 };
 
 export const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [state, dispatch] = useReducer(cartReducer, initialState, () => {
+    const storedState = localStorage.getItem("cartState");
+    return storedState ? JSON.parse(storedState) : initialState;
+  });
 
   useEffect(() => {
     localStorage.setItem("cartState", JSON.stringify(state));

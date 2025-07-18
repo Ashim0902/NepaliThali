@@ -53,7 +53,7 @@ const ProductModal = ({ data, setShowModal }) => {
           </button>
           <div className="absolute bottom-4 left-4">
             <span className="bg-orange-500 text-white text-sm px-3 py-1 rounded-full font-semibold">
-              {data.category}
+              {data.tags[0]}
             </span>
           </div>
         </div>
@@ -62,10 +62,14 @@ const ProductModal = ({ data, setShowModal }) => {
         <div className="p-6 space-y-4">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">{data.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                {data.name}
+              </h2>
               <StarRating rating={data.rating} />
             </div>
-            <div className="text-2xl font-bold text-green-600">Rs. {data.caloriesPerServing}</div>
+            <div className="text-2xl font-bold text-green-600">
+              Rs. {data.caloriesPerServing}
+            </div>
           </div>
 
           <p className="text-gray-600 leading-relaxed">{data.description}</p>
@@ -74,11 +78,15 @@ const ProductModal = ({ data, setShowModal }) => {
           <div className="grid grid-cols-2 gap-4 py-4">
             <div className="flex items-center gap-2 text-gray-600">
               <Clock size={16} className="text-orange-500" />
-              <span className="text-sm">Cooking Time: {data.cookingTime}</span>
+              <span className="text-sm">
+                Cooking Time: {data.cookTimeMinutes}
+              </span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <Users size={16} className="text-orange-500" />
-              <span className="text-sm">Meal Type: {data.mealType.join(", ")}</span>
+              <span className="text-sm">
+                Meal Type: {data.mealType.join(", ")}
+              </span>
             </div>
             {data.servings && (
               <div className="flex items-center gap-2 text-gray-600">
@@ -112,7 +120,9 @@ const ProductModal = ({ data, setShowModal }) => {
           {/* Instructions */}
           {data.instructions && data.instructions.length > 0 && (
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2">Instructions:</h3>
+              <h3 className="font-semibold text-gray-800 mb-2">
+                Instructions:
+              </h3>
               <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600">
                 {data.instructions.slice(0, 3).map((instruction, index) => (
                   <li key={index}>{instruction}</li>

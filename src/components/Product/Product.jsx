@@ -1,66 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import { getProducts, searchProducts } from "../../data/productData";
-import { Loader2 } from "lucide-react";
+import productDataApi from "../../data/productData"; // ✅ correct import
 
-const Product = ({
-  searchQuery = "",
-  onProductsLoad,
-}) => {
+const Product = ({ searchQuery = "", onProductsLoad }) => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      try {
-        const transformedData = await getProducts();
-
-        setProducts(transformedData);
-        onProductsLoad && onProductsLoad(transformedData);
-      } catch (error) {
-        console.error("Error loading products:", error);
-        setProducts([]);
-        onProductsLoad && onProductsLoad([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProducts();
+    productDataApi((fetchedData) => {
+      setProducts(fetchedData);
+      onProductsLoad && onProductsLoad(fetchedData);
+    });
   }, [onProductsLoad]);
 
-  useEffect(() => {
-    let filtered = products;
-
-    // Apply search filter
-    if (searchQuery.trim()) {
-      filtered = searchProducts(searchQuery, products);
-    }
-
-    setFilteredProducts(filtered);
-  }, [searchQuery, products]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <Loader2 className="animate-spin text-orange-500" size={48} />
-      </div>
-    );
-  }
+  const filteredProducts = (products || []).filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (filteredProducts.length === 0) {
     return (
-      <div className="text-center py-20">
-        <h3 className="text-xl font-semibold text-gray-600 mb-2">
-          No products found
-        </h3>
-        <p className="text-gray-500">
-          {searchQuery
-            ? `No results for "${searchQuery}"`
-            : "No products available"}
-        </p>
+      <div className="min-h-screen pt-24 flex justify-center items-center text-gray-600">
+        No matching items found.
       </div>
     );
   }
