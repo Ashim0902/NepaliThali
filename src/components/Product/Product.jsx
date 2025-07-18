@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import productDataApi from "../../data/productData"; // ✅ correct import
+import productDataApi from "../../data/productData";
 
 const Product = ({ searchQuery = "", onProductsLoad }) => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ Loading state
 
   useEffect(() => {
     productDataApi((fetchedData) => {
       setProducts(fetchedData);
+      setLoading(false); // ✅ Turn off loading after data fetched
       onProductsLoad && onProductsLoad(fetchedData);
     });
   }, [onProductsLoad]);
@@ -16,10 +18,20 @@ const Product = ({ searchQuery = "", onProductsLoad }) => {
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (filteredProducts.length === 0) {
+  if (loading) {
     return (
-      <div className="min-h-screen pt-24 flex justify-center items-center text-gray-600">
-        No matching items found.
+      <div className="px-5 py-3">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">Our Menu</h2>
+          <span className="text-gray-600">{filteredProducts.length} items</span>
+        </div>
+        <div className="pt-24 flex flex-col items-center justify-center space-y-6 text-gray-700">
+          <img
+            className="h-20 w-20 animate-spin"
+            src="/logo.png"
+            alt="Loading"
+          />
+        </div>
       </div>
     );
   }
