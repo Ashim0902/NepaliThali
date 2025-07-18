@@ -1,15 +1,15 @@
 import React from "react";
 import { AlertTriangle, X } from "lucide-react";
 
-const ConfirmModal = ({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  title, 
-  message, 
-  confirmText = "Confirm", 
+const ConfirmModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  confirmText = "Confirm",
   cancelText = "Cancel",
-  type = "warning" // warning, danger
+  type = "warning", // warning, danger
 }) => {
   if (!isOpen) return null;
 
@@ -19,13 +19,13 @@ const ConfirmModal = ({
         return {
           icon: "text-red-500",
           button: "bg-red-500 hover:bg-red-600",
-          accent: "text-red-600"
+          accent: "text-red-600",
         };
       default:
         return {
           icon: "text-orange-500",
           button: "bg-orange-500 hover:bg-orange-600",
-          accent: "text-orange-600"
+          accent: "text-orange-600",
         };
     }
   };

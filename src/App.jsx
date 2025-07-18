@@ -18,6 +18,8 @@ import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import { CartProvider } from "./context/CartContext";
 import { scrollToTopInstant } from "./utils/scrollToTop";
+import { SearchProvider } from "./context/SearchContext";
+import CheckoutPage from "./pages/CheckoutPage";
 
 // Component to handle scroll to top on route change
 const ScrollToTop = () => {
@@ -53,36 +55,39 @@ function App() {
 
   return (
     <CartProvider>
-      <Router>
-        <ScrollToTop />
-        <div className="bg-gray-50 mt-20">
-          <NavBar onSearch={handleSearch} />
-          <main>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <>
-                    <HeroSection />
-                    <Categories />
-                    <Product
-                      searchQuery={searchQuery}
-                      onProductsLoad={setProducts}
-                    />
-                  </>
-                }
-              />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/menu" element={<MenuPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/signin" element={<SignInPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-            </Routes>
-          </main>
-        </div>
-      </Router>
-      <Footer />
+      <SearchProvider>
+        <Router>
+          <ScrollToTop />
+          <div className="bg-gray-50 mt-20">
+            <NavBar onSearch={handleSearch} />
+            <main>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <HeroSection />
+                      <Categories />
+                      <Product
+                        searchQuery={searchQuery}
+                        onProductsLoad={setProducts}
+                      />
+                    </>
+                  }
+                />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/menu" element={<MenuPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/signin" element={<SignInPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
+              </Routes>
+            </main>
+          </div>
+          <Footer />
+        </Router>
+      </SearchProvider>
     </CartProvider>
   );
 }
