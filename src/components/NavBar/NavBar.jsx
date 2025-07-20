@@ -48,16 +48,8 @@ const NavBar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2 min-w-max">
           <div className="flex items-center relative">
-            <div className="h-12 w-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
-              <ChefHat className="text-white" size={24} />
-            </div>
             <div className="ml-3 hidden sm:block">
-              <span className="text-xl font-bold text-gray-800 tracking-tight">
-                NepaliThali
-              </span>
-              <span className="block text-xs text-orange-600 font-medium">
-                Authentic & Fresh
-              </span>
+              <img className="h-20 w-20 " src="logo.png" alt="NepaliThali" />
             </div>
           </div>
         </Link>
