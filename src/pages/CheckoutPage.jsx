@@ -1,177 +1,367 @@
-import React, { useState } from "react";
-import { useCart } from "../context/CartContext";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useCart } from "../context/CartContext";
+import {
+  CreditCard,
+  Truck,
+  MapPin,
+  Phone,
+  User,
+  ArrowLeft,
+} from "lucide-react";
 
 const CheckoutPage = () => {
-  const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
+  const { items, totalPrice, clearCart } = useCart();
 
   const [formData, setFormData] = useState({
     fullName: "",
+    email: "",
     phone: "",
+    city: "",
     address: "",
+    notes: "",
   });
-
   const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const deliveryFee = 50;
-  const finalTotal = totalPrice + deliveryFee;
+  const deliveryFee = totalPrice > 300 ? 0 : 30;
+  const total = totalPrice + deliveryFee;
 
-  const handleInputChange = (e) => {
+  useEffect(() => {
+    console.log("Cart items:", items);
+  }, [items]);
+
+  function handleInputChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  }
 
-  const handlePlaceOrder = () => {
-    if (!formData.fullName || !formData.phone || !formData.address) {
+  async function handlePlaceOrder(e) {
+    e.preventDefault();
+
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.city ||
+      !formData.address
+    ) {
       Swal.fire({
-        title: "Missing Details!",
-        text: "Please fill in all required fields.",
         icon: "warning",
+        title: "Please fill all required fields",
         confirmButtonColor: "#f97316",
       });
       return;
     }
 
-    Swal.fire({
-      title: "Order Placed!",
-      text: `Your order has been placed successfully.\nPayment Method: ${
-        paymentMethod === "cod" ? "Cash on Delivery" : "eSewa (Coming Soon)"
-      }`,
-      icon: "success",
-      confirmButtonText: "Go to Menu",
-      confirmButtonColor: "#f97316",
-      customClass: {
-        title: "text-orange-600",
-      },
-    }).then(() => {
-      clearCart();
-      navigate("/menu");
-    });
-  };
+    if (items.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Your cart is empty",
+        confirmButtonColor: "#f97316",
+      });
+      return;
+    }
 
-  if (items.length === 0) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-xl sm:text-2xl font-semibold mb-4">
-          Your cart is empty
-        </h2>
-        <button
-          onClick={() => navigate("/menu")}
-          className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg transition"
-        >
-          Browse Menu
-        </button>
-      </div>
-    );
+    setIsProcessing(true);
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      clearCart();
+
+      await Swal.fire({
+        icon: "success",
+        title: "Thank you for your order!",
+        text: "Your order has been placed successfully.",
+        confirmButtonColor: "#f97316",
+      });
+
+      navigate("/");
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong. Please try again.",
+      });
+      setIsProcessing(false);
+    }
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-      <h1 className="text-2xl sm:text-3xl font-bold mb-8 text-center text-orange-600">
-        Checkout
-      </h1>
+    <div className="min-h-screen p-4 pt-24 text-black">
+      <div className="max-w-6xl mx-auto">
+        <button
+          onClick={() => navigate("/cart")}
+          className="mb-6 flex items-center gap-2 text-orange-600 hover:text-orange-800 transition-colors"
+          type="button"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Back to Cart
+        </button>
 
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="bg-white w-full md:w-1/2 p-6 sm:p-8 rounded-xl shadow-md">
-          <h2 className="text-xl font-semibold mb-6">Delivery Details</h2>
-
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">Full Name *</label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-orange-400 focus:outline-none"
-              placeholder="Enter your full name"
-            />
+        <form
+          onSubmit={handlePlaceOrder}
+          className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+          noValidate
+        >
+          <div className="bg-orange-500 text-white p-6">
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <CreditCard className="w-8 h-8" />
+              Checkout
+            </h1>
+            <p className="mt-2">Complete your order details</p>
           </div>
 
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">Phone Number *</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-orange-400 focus:outline-none"
-              placeholder="98XXXXXXXX"
-            />
-          </div>
+          <div className="lg:flex lg:gap-8 p-6">
+            <div className="lg:w-2/3 space-y-8">
+              <div className="rounded-2xl p-6 border">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
+                  <Truck className="w-6 h-6 text-orange-500" />
+                  Delivery Information
+                </h2>
 
-          <div className="mb-6">
-            <label className="block mb-2 font-medium">Address *</label>
-            <textarea
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-orange-400 focus:outline-none"
-              placeholder="Delivery location"
-              rows={4}
-            />
-          </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="fullName"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      <User className="w-4 h-4 inline mr-2" />
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      placeholder="your@email.com"
+                    />
+                  </div>
 
-          <h2 className="text-xl font-semibold mb-4">Payment Method *</h2>
-          <div className="space-y-3">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="cod"
-                checked={paymentMethod === "cod"}
-                onChange={() => setPaymentMethod("cod")}
-                className="cursor-pointer"
-              />
-              <span className="font-medium">Cash on Delivery</span>
-            </label>
-            <label className="flex items-center gap-3 text-gray-400 cursor-not-allowed">
-              <input type="radio" name="paymentMethod" value="esewa" disabled />
-              <span>eSewa (Coming Soon)</span>
-            </label>
-          </div>
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      <Phone className="w-4 h-4 inline mr-2" />
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      placeholder="98XXXXXXXX"
+                    />
+                  </div>
 
-          <button
-            onClick={handlePlaceOrder}
-            className="mt-8 w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition"
-          >
-            Place Order
-          </button>
-        </div>
+                  <div>
+                    <label
+                      htmlFor="city"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      City *
+                    </label>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      placeholder="Your city"
+                    />
+                  </div>
 
-        <div className="bg-white w-full md:w-1/2 p-6 sm:p-8 rounded-xl shadow-md border">
-          <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
+                  <div>
+                    <label
+                      htmlFor="address"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      <MapPin className="w-4 h-4 inline mr-2" />
+                      Delivery Address *
+                    </label>
+                    <textarea
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      required
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl resize-none"
+                      placeholder="Street address, building, apartment, etc."
+                    />
+                  </div>
 
-          <ul className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
-            {items.map((item) => (
-              <li key={item.id} className="flex justify-between items-center">
-                <div>
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                  <div>
+                    <label
+                      htmlFor="notes"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      Delivery Notes
+                    </label>
+                    <textarea
+                      id="notes"
+                      name="notes"
+                      value={formData.notes}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl resize-none"
+                      placeholder="Special instructions..."
+                    />
+                  </div>
                 </div>
-                <p className="font-semibold">
-                  Rs. {item.caloriesPerServing * item.quantity}
-                </p>
-              </li>
-            ))}
-          </ul>
+              </div>
 
-          <div className="border-t mt-6 pt-4 text-sm sm:text-base text-gray-700 space-y-2">
-            <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span>Rs. {totalPrice}</span>
+              <div className="rounded-2xl p-6 border">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
+                  <CreditCard className="w-6 h-6 text-orange-500" />
+                  Payment Method
+                </h2>
+
+                <label className="flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all border-orange-500 bg-orange-50">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="cod"
+                    checked={paymentMethod === "cod"}
+                    onChange={() => setPaymentMethod("cod")}
+                    className="w-5 h-5"
+                    required
+                  />
+                  <span className="font-medium">Cash on Delivery</span>
+                </label>
+
+                <label className="flex items-center gap-4 p-4 border-2 rounded-xl cursor-not-allowed opacity-50 mt-4">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="esewa"
+                    disabled
+                    className="w-5 h-5"
+                  />
+                  <span className="font-medium">eSewa</span>
+                  <span className="text-sm text-gray-500 ml-auto">
+                    Coming Soon
+                  </span>
+                </label>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span>Delivery Fee</span>
-              <span>Rs. {deliveryFee}</span>
-            </div>
-            <div className="flex justify-between font-bold text-lg text-orange-600">
-              <span>Total</span>
-              <span>Rs. {finalTotal}</span>
+
+            <div className="lg:w-1/3 mt-8 lg:mt-0">
+              <div className="rounded-2xl p-6 border sticky top-6">
+                <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
+
+                <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
+                  {items.length === 0 && (
+                    <p className="text-gray-500">Your cart is empty.</p>
+                  )}
+
+                  {items.map((item) => (
+                    <div key={item.id} className="flex gap-3">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-12 h-12 object-cover rounded-lg"
+                      />
+                      <div className="flex-1">
+                        <h4 className="font-medium text-sm">{item.name}</h4>
+                        <p className="text-sm text-gray-500">
+                          {item.mealType?.join(", ") || "Food"} • Qty:{" "}
+                          {item.quantity}
+                        </p>
+                        <p className="text-sm font-semibold text-orange-600">
+                          Rs.{" "}
+                          {(
+                            (item.price ?? item.caloriesPerServing ?? 0) *
+                            item.quantity
+                          ).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t pt-4 space-y-3">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Subtotal:</span>
+                    <span>Rs. {totalPrice.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Delivery Fee:</span>
+                    <span>Rs. {deliveryFee.toFixed(2)}</span>
+                  </div>
+
+                  {deliveryFee === 0 && (
+                    <p className="text-green-600 text-sm font-medium mt-1">
+                      Delivery fee waived! Discount applied.
+                    </p>
+                  )}
+
+                  <div className="border-t pt-3">
+                    <div className="flex justify-between text-xl font-bold">
+                      <span>Total:</span>
+                      <span>Rs. {total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className={`w-full mt-6 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    isProcessing
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-orange-500 hover:bg-orange-600 text-white"
+                  }`}
+                >
+                  {isProcessing ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Processing...
+                    </div>
+                  ) : (
+                    "Place Order"
+                  )}
+                </button>
+
+                <div className="mt-4 text-center">
+                  <p className="text-xs text-gray-500">
+                    By placing your order, you agree to our terms and conditions
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
