@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Search,
-  Menu,
-  X,
-  ShoppingCart,
-  User,
-  UserPlus,
-  ChefHat,
-} from "lucide-react";
+import { Search, Menu, X, ShoppingCart, User, UserPlus } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useSearch } from "../../context/SearchContext";
 
@@ -36,7 +28,6 @@ const NavBar = () => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    // Navigate to menu page when searching
     if (window.location.pathname !== "/menu") {
       navigate("/menu");
     }
@@ -48,15 +39,18 @@ const NavBar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2 min-w-max">
           <div className="flex items-center relative">
-            <div className="ml-3 hidden sm:block">
-              <img className="h-20 w-20 " src="logo.png" alt="NepaliThali" />
+            <div className="ml-2">
+              <img
+                src="logo.png"
+                alt="NepaliThali"
+                className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain"
+              />
             </div>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center space-x-8 flex-grow justify-evenly">
-          {/* Nav links */}
           <div className="flex space-x-8 whitespace-nowrap">
             {["Home", "Menu", "About", "Contact"].map((link) => (
               <Link
