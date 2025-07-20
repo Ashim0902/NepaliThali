@@ -9,7 +9,7 @@ const ConfirmModal = ({
   message,
   confirmText = "Confirm",
   cancelText = "Cancel",
-  type = "warning", // warning, danger
+  type = "warning",
 }) => {
   if (!isOpen) return null;
 
@@ -35,11 +35,10 @@ const ConfirmModal = ({
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl transform transition-all">
-        {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-full bg-gray-100`}>
-              <AlertTriangle className={`${styles.icon}`} size={24} />
+            <div className="p-2 rounded-full bg-gray-100">
+              <AlertTriangle className={styles.icon} size={24} />
             </div>
             <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
           </div>
@@ -51,12 +50,10 @@ const ConfirmModal = ({
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-6">
           <p className="text-gray-600 leading-relaxed">{message}</p>
         </div>
 
-        {/* Actions */}
         <div className="flex gap-3 p-6 pt-0">
           <button
             onClick={onClose}

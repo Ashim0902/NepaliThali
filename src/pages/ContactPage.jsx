@@ -6,19 +6,18 @@ const ContactPage = () => {
     name: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
   });
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
     alert("Thank you for your message! We'll get back to you soon.");
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
@@ -29,16 +28,19 @@ const ContactPage = () => {
       <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-          <p className="text-xl">We'd love to hear from you. Get in touch with us!</p>
+          <p className="text-xl">
+            We'd love to hear from you. Get in touch with us!
+          </p>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-8">Get in Touch</h2>
-            
+            <h2 className="text-3xl font-bold text-gray-800 mb-8">
+              Get in Touch
+            </h2>
+
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="bg-orange-100 p-3 rounded-lg">
@@ -78,26 +80,33 @@ const ContactPage = () => {
                   <Clock className="text-orange-500" size={24} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Business Hours</h3>
-                  <p className="text-gray-600">Sunday - Saturday: 9:00 AM - 10:00 PM</p>
+                  <h3 className="font-semibold text-gray-800 mb-1">
+                    Business Hours
+                  </h3>
+                  <p className="text-gray-600">
+                    Sunday - Saturday: 9:00 AM - 10:00 PM
+                  </p>
                   <p className="text-gray-600">Delivery: 10:00 AM - 9:30 PM</p>
                 </div>
               </div>
             </div>
 
-            {/* Map placeholder */}
             <div className="mt-8 bg-gray-200 h-64 rounded-lg flex items-center justify-center">
               <p className="text-gray-500">Map Location - Pokhara, Nepal</p>
             </div>
           </div>
 
-          {/* Contact Form */}
           <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h2>
-            
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              Send us a Message
+            </h2>
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Full Name
                 </label>
                 <input
@@ -113,7 +122,10 @@ const ContactPage = () => {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Email Address
                 </label>
                 <input
@@ -129,7 +141,10 @@ const ContactPage = () => {
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="subject"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Subject
                 </label>
                 <input
@@ -145,7 +160,10 @@ const ContactPage = () => {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Message
                 </label>
                 <textarea

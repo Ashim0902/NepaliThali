@@ -1,118 +1,134 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Menu, X, ShoppingCart, User, UserPlus } from "lucide-react";
+import { Search, Menu, X, ShoppingCart } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useSearch } from "../../context/SearchContext";
 
 const NavBar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
   const { totalItems } = useCart();
   const { searchQuery, setSearchQuery } = useSearch();
   const navigate = useNavigate();
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen((prev) => !prev);
-  };
-
-  const handleCartClick = () => {
-    navigate("/cart");
-  };
-
-  const handleSignInClick = () => {
-    navigate("/signin");
-  };
-
-  const handleSignUpClick = () => {
-    navigate("/signup");
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const performSearch = () => {
     if (window.location.pathname !== "/menu") {
       navigate("/menu");
     }
   };
 
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
+  const handleKeyDown = (e) => e.key === "Enter" && performSearch();
+  const clearSearch = () => setSearchQuery("");
+
   return (
-    <nav className="fixed z-50 top-2 left-2 right-2 lg:left-4 lg:right-4 rounded-2xl shadow-xl bg-white/95 backdrop-blur-lg text-black border border-orange-100 ">
-      <div className="flex items-center justify-between w-full h-16 px-3 lg:px-8">
-        {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2 min-w-max">
-          <div className="flex items-center relative">
-            <div className="ml-2">
-              <img
-                src="logo.png"
-                alt="NepaliThali"
-                className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain"
-              />
-            </div>
-          </div>
+    <nav className="fixed top-2 left-2 right-2 lg:left-4 lg:right-4 bg-white/95 backdrop-blur-lg rounded-2xl border border-orange-100 shadow-xl z-50">
+      <div className="flex items-center justify-between h-16 px-3 lg:px-8">
+        <Link to="/" className="flex items-center min-w-max">
+          <img
+            src="logo.png"
+            alt="NepaliThali"
+            className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain"
+          />
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center space-x-8 flex-grow justify-evenly">
-          <div className="flex space-x-8 whitespace-nowrap">
-            {["Home", "Menu", "About", "Contact"].map((link) => (
+        <div className="hidden lg:flex items-center flex-grow justify-evenly">
+          <ul className="flex space-x-8 whitespace-nowrap">
+            <li>
               <Link
-                key={link}
-                to={link === "Home" ? "/" : `/${link.toLowerCase()}`}
-                className="text-gray-700 hover:text-orange-600 transition-colors font-medium relative group py-2"
+                to="/"
+                className="text-gray-700 hover:text-orange-600 font-medium relative group py-2"
               >
-                {link}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
+                Home
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-300 group-hover:w-full" />
               </Link>
-            ))}
-          </div>
+            </li>
+            <li>
+              <Link
+                to="/menu"
+                className="text-gray-700 hover:text-orange-600 font-medium relative group py-2"
+              >
+                Menu
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-300 group-hover:w-full" />
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/about"
+                className="text-gray-700 hover:text-orange-600 font-medium relative group py-2"
+              >
+                About
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-300 group-hover:w-full" />
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/contact"
+                className="text-gray-700 hover:text-orange-600 font-medium relative group py-2"
+              >
+                Contact
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-300 group-hover:w-full" />
+              </Link>
+            </li>
+          </ul>
 
-          {/* Search */}
-          <div className="relative w-80 flex-shrink-0">
-            <Search className="absolute left-3 top-1/2 z-50 -translate-y-1/2 text-orange-400 w-5 h-5 pointer-events-none" />
+          <div className="relative w-96 flex-shrink-0 rounded-full border-2 border-orange-500 bg-white flex overflow-hidden ml-8 shadow-md">
+            {searchFocused && (
+              <div className="flex items-center px-4 text-orange-500 pointer-events-none">
+                <Search size={20} />
+              </div>
+            )}
+
             <input
               type="search"
               placeholder="Search dishes..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-orange-200 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all bg-white/80 backdrop-blur-sm"
+              onKeyDown={handleKeyDown}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+              className={`flex-grow py-2 text-black placeholder-black focus:outline-none text-base ${
+                searchFocused ? "pl-2" : "pl-6"
+              }`}
             />
+
+            <div className="w-px h-8 my-auto bg-orange-400"></div>
+
+            {searchQuery && (
+              <button
+                onClick={clearSearch}
+                className="flex items-center justify-center text-red-500 hover:text-red-700 transition-colors focus:outline-none"
+                aria-label="Clear search"
+                type="button"
+              ></button>
+            )}
+
+            <button
+              onClick={performSearch}
+              className="px-5 flex items-center justify-center text-black hover:bg-orange-100 rounded-r-full transition-colors"
+              aria-label="Search"
+            >
+              <Search size={20} />
+            </button>
           </div>
         </div>
 
-        {/* Desktop Actions */}
-        <div className="hidden lg:flex items-center space-x-3">
-          {/* Cart */}
+        <div className="hidden lg:flex items-center ml-6">
           <button
-            onClick={handleCartClick}
-            className="relative text-orange-500 hover:text-orange-600 transition-colors p-2.5 rounded-xl hover:bg-orange-50 group"
+            onClick={() => navigate("/cart")}
+            className="relative text-orange-500 hover:text-orange-600 p-2.5 rounded-xl hover:bg-orange-50"
             title="Cart"
           >
             <ShoppingCart size={24} />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg animate-pulse">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg">
                 {totalItems}
               </span>
             )}
           </button>
-
-          {/* Sign In */}
-          <button
-            onClick={handleSignInClick}
-            className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl border-2 border-orange-500 text-orange-500 hover:bg-orange-50 transition-all font-medium"
-          >
-            <User size={16} />
-            <span className="hidden xl:block">Sign In</span>
-          </button>
-
-          {/* Sign Up */}
-          <button
-            onClick={handleSignUpClick}
-            className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg"
-          >
-            <UserPlus size={16} />
-            <span className="hidden xl:block">Sign Up</span>
-          </button>
         </div>
 
-        {/* Mobile hamburger */}
         <button
           onClick={toggleMobileMenu}
           className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-orange-600 hover:bg-orange-100 transition-colors"
@@ -122,38 +138,70 @@ const NavBar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white/95 backdrop-blur-lg border-t border-orange-100 shadow-lg rounded-b-2xl">
           <div className="flex flex-col px-4 py-4 space-y-4">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 w-5 h-5 pointer-events-none" />
+            <div className="relative w-full rounded-full border-2 border-orange-500 bg-white flex overflow-hidden">
               <input
                 type="search"
                 placeholder="Search dishes..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-orange-200 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all bg-white/80"
+                onKeyDown={handleKeyDown}
+                className="flex-grow px-6 py-2 text-black placeholder-black rounded-l-full focus:outline-none focus:ring-0 text-base"
               />
+              <div className="w-px bg-orange-500"></div>
+              <button
+                onClick={performSearch}
+                className="px-5 flex items-center justify-center text-black hover:bg-orange-100 rounded-r-full transition-colors"
+                aria-label="Search"
+              >
+                <Search size={20} />
+              </button>
             </div>
 
-            {/* Nav links */}
-            {["Home", "Menu", "About", "Contact"].map((link) => (
-              <Link
-                key={link}
-                to={link === "Home" ? "/" : `/${link.toLowerCase()}`}
-                className="block text-gray-700 hover:text-orange-600 transition-colors px-3 py-2.5 rounded-xl font-medium hover:bg-orange-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link}
-              </Link>
-            ))}
+            <ul className="flex flex-col space-y-2">
+              <li>
+                <Link
+                  to="/"
+                  className="block text-gray-700 hover:text-orange-600 px-3 py-2.5 rounded-xl font-medium hover:bg-orange-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/menu"
+                  className="block text-gray-700 hover:text-orange-600 px-3 py-2.5 rounded-xl font-medium hover:bg-orange-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Menu
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  className="block text-gray-700 hover:text-orange-600 px-3 py-2.5 rounded-xl font-medium hover:bg-orange-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="block text-gray-700 hover:text-orange-600 px-3 py-2.5 rounded-xl font-medium hover:bg-orange-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+              </li>
+            </ul>
 
-            {/* Cart */}
             <button
               onClick={() => {
-                handleCartClick();
+                navigate("/cart");
                 setMobileMenuOpen(false);
               }}
               className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-orange-100 text-orange-600 rounded-xl font-medium hover:bg-orange-200 transition-colors"
@@ -161,30 +209,6 @@ const NavBar = () => {
               <ShoppingCart size={20} />
               Cart ({totalItems})
             </button>
-
-            {/* Sign In / Sign Up */}
-            <div className="flex space-x-3 pt-2">
-              <button
-                onClick={() => {
-                  handleSignInClick();
-                  setMobileMenuOpen(false);
-                }}
-                className="flex-1 flex items-center justify-center gap-2 text-center text-sm px-4 py-2.5 rounded-xl border-2 border-orange-500 text-orange-500 hover:bg-orange-50 transition-all font-medium"
-              >
-                <User size={16} />
-                Sign In
-              </button>
-              <button
-                onClick={() => {
-                  handleSignUpClick();
-                  setMobileMenuOpen(false);
-                }}
-                className="flex-1 flex items-center justify-center gap-2 text-center text-sm px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 transition-all font-medium"
-              >
-                <UserPlus size={16} />
-                Sign Up
-              </button>
-            </div>
           </div>
         </div>
       )}

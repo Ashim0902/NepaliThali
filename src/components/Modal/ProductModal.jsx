@@ -38,7 +38,6 @@ const ProductModal = ({ data, setShowModal }) => {
         className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="relative">
           <img
             src={data.image}
@@ -58,7 +57,6 @@ const ProductModal = ({ data, setShowModal }) => {
           </div>
         </div>
 
-        {/* Content */}
         <div className="p-6 space-y-4">
           <div className="flex justify-between items-start">
             <div>
@@ -74,7 +72,6 @@ const ProductModal = ({ data, setShowModal }) => {
 
           <p className="text-gray-600 leading-relaxed">{data.description}</p>
 
-          {/* Details */}
           <div className="grid grid-cols-2 gap-4 py-4">
             <div className="flex items-center gap-2 text-gray-600">
               <Clock size={16} className="text-orange-500" />
@@ -102,7 +99,6 @@ const ProductModal = ({ data, setShowModal }) => {
             )}
           </div>
 
-          {/* Ingredients */}
           <div>
             <h3 className="font-semibold text-gray-800 mb-2">Ingredients:</h3>
             <div className="flex flex-wrap gap-2">
@@ -117,7 +113,6 @@ const ProductModal = ({ data, setShowModal }) => {
             </div>
           </div>
 
-          {/* Instructions */}
           {data.instructions && data.instructions.length > 0 && (
             <div>
               <h3 className="font-semibold text-gray-800 mb-2">
@@ -136,7 +131,6 @@ const ProductModal = ({ data, setShowModal }) => {
             </div>
           )}
 
-          {/* Add to Cart Button */}
           <div className="pt-4 border-t">
             <AddToCart product={data} />
           </div>

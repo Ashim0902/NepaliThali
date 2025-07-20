@@ -60,7 +60,6 @@ const CheckoutPage = () => {
       </h1>
 
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Form Section */}
         <div className="bg-white w-full md:w-1/2 p-6 sm:p-8 rounded-xl shadow-md">
           <h2 className="text-xl font-semibold mb-6">Delivery Details</h2>
 
@@ -127,7 +126,6 @@ const CheckoutPage = () => {
           </button>
         </div>
 
-        {/* Order Summary Section */}
         <div className="bg-white w-full md:w-1/2 p-6 sm:p-8 rounded-xl shadow-md border">
           <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
 

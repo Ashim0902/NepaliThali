@@ -4,12 +4,12 @@ import productDataApi from "../../data/productData";
 
 const Product = ({ searchQuery = "", onProductsLoad }) => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // ✅ Loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     productDataApi((fetchedData) => {
       setProducts(fetchedData);
-      setLoading(false); // ✅ Turn off loading after data fetched
+      setLoading(false);
       onProductsLoad && onProductsLoad(fetchedData);
     });
   }, [onProductsLoad]);

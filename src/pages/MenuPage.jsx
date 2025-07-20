@@ -17,7 +17,6 @@ const MenuPage = () => {
     });
   }, []);
 
-  // Filter products based on search query
   const filteredProducts = products.filter(
     (product) =>
       (product.name || product.title || "")
@@ -45,7 +44,6 @@ const MenuPage = () => {
   return (
     <div className="min-h-screen pt-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Our Menu</h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
@@ -64,7 +62,6 @@ const MenuPage = () => {
           )}
         </div>
 
-        {/* Product Grid */}
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
             {filteredProducts.map((product) => (

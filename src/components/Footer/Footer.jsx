@@ -5,7 +5,6 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white px-4 py-12 mt-12">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Brand Info */}
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
             <img
@@ -22,7 +21,6 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Navigation Links */}
         <div>
           <h3 className="text-lg font-semibold mb-4 text-orange-400">
             Quick Links
@@ -42,7 +40,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Contact Info */}
         <div>
           <h3 className="text-lg font-semibold mb-4 text-orange-400">
             Contact Us
@@ -64,7 +61,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Section */}
       <div className="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-400">
         <p>
           © 2024 NepaliThali. All rights reserved. Made with ❤️ for authentic

@@ -9,7 +9,6 @@ const Card = ({ data }) => {
   return (
     <>
       <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden w-full max-w-sm transform hover:-translate-y-2">
-        {/* Image Section */}
         <div
           className="relative h-48 overflow-hidden cursor-pointer"
           onClick={() => setShowModal(true)}
@@ -19,8 +18,6 @@ const Card = ({ data }) => {
             alt={data.name}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
-
-          {/* Category Badge */}
           <div className="absolute top-3 left-3 z-10">
             <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-semibold uppercase tracking-wide">
               {data.tags[0]}
@@ -28,7 +25,6 @@ const Card = ({ data }) => {
           </div>
         </div>
 
-        {/* Card Content */}
         <div className="p-4 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs text-orange-500 uppercase font-semibold tracking-wide">
@@ -48,13 +44,11 @@ const Card = ({ data }) => {
             {data.instructions}
           </p>
 
-          {/* Rating */}
           <div className="flex items-center gap-1 text-yellow-500 text-sm">
             <Star size={16} fill="#facc15" stroke="#facc15" />
             <span className="text-gray-700">{data.rating}</span>
           </div>
 
-          {/* Price + Cart */}
           <div className="flex justify-between items-center pt-2">
             <div className="text-lg font-bold text-red-600">
               Rs. {data.caloriesPerServing}
@@ -64,7 +58,6 @@ const Card = ({ data }) => {
         </div>
       </div>
 
-      {/* Modal */}
       {showModal && <ProductModal data={data} setShowModal={setShowModal} />}
     </>
   );

@@ -14,14 +14,11 @@ import CartPage from "./pages/CartPage";
 import MenuPage from "./pages/MenuPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
 import { CartProvider } from "./context/CartContext";
 import { scrollToTopInstant } from "./utils/scrollToTop";
 import { SearchProvider } from "./context/SearchContext";
 import CheckoutPage from "./pages/CheckoutPage";
 
-// Component to handle scroll to top on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -36,7 +33,6 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState([]);
 
-  // ✅ Disable right-click and dev tools shortcuts
   useEffect(() => {
     const handleRightClick = (e) => e.preventDefault();
 
@@ -46,8 +42,6 @@ function App() {
       document.removeEventListener("contextmenu", handleRightClick);
     };
   }, []);
-
-  // Disable right-click and dev tools shortcuts code Finished
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -80,8 +74,6 @@ function App() {
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/contact" element={<ContactPage />} />
-                <Route path="/signin" element={<SignInPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
               </Routes>
             </main>
           </div>

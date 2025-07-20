@@ -101,7 +101,6 @@ const CartPage = () => {
     <div className="min-h-screen pt-24 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          {/* Header */}
           <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 lg:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
@@ -121,7 +120,6 @@ const CartPage = () => {
             </div>
           </div>
 
-          {/* Cart Items */}
           <div className="p-4 lg:p-6">
             <div className="space-y-4">
               {items.map((item) => (
@@ -148,7 +146,6 @@ const CartPage = () => {
                     </p>
                   </div>
 
-                  {/* Mobile Layout */}
                   <div className="flex items-center justify-between w-full sm:hidden">
                     <div className="flex items-center gap-3">
                       <button
@@ -183,9 +180,7 @@ const CartPage = () => {
                     </button>
                   </div>
 
-                  {/* Desktop Layout */}
                   <div className="hidden sm:flex items-center gap-4">
-                    {/* Quantity Controls */}
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => handleQuantityDecrease(item)}
@@ -205,15 +200,12 @@ const CartPage = () => {
                         <Plus size={16} />
                       </button>
                     </div>
-
-                    {/* Subtotal */}
                     <div className="text-right min-w-[80px]">
                       <p className="font-bold text-gray-800">
                         Rs. {item.caloriesPerServing * item.quantity}
                       </p>
                     </div>
 
-                    {/* Remove Button */}
                     <button
                       onClick={() => handleRemoveItem(item)}
                       className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
@@ -226,7 +218,6 @@ const CartPage = () => {
               ))}
             </div>
 
-            {/* Cart Summary */}
             <div className="border-t border-gray-200 mt-6 pt-6">
               <div className="flex justify-between items-center mb-6">
                 <span className="text-xl font-semibold text-gray-800">
@@ -258,7 +249,6 @@ const CartPage = () => {
         </div>
       </div>
 
-      {/* Confirmation Modal */}
       <ConfirmModal
         isOpen={confirmModal.isOpen}
         onClose={closeModal}
