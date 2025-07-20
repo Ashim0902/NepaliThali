@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const CheckoutPage = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -24,17 +25,30 @@ const CheckoutPage = () => {
 
   const handlePlaceOrder = () => {
     if (!formData.fullName || !formData.phone || !formData.address) {
-      alert("Please fill in all required fields.");
+      Swal.fire({
+        title: "Missing Details!",
+        text: "Please fill in all required fields.",
+        icon: "warning",
+        confirmButtonColor: "#f97316",
+      });
       return;
     }
 
-    alert(
-      `Order placed successfully!\nPayment Method: ${
+    Swal.fire({
+      title: "Order Placed!",
+      text: `Your order has been placed successfully.\nPayment Method: ${
         paymentMethod === "cod" ? "Cash on Delivery" : "eSewa (Coming Soon)"
-      }`
-    );
-    clearCart();
-    navigate("/");
+      }`,
+      icon: "success",
+      confirmButtonText: "Go to Menu",
+      confirmButtonColor: "#f97316",
+      customClass: {
+        title: "text-orange-600",
+      },
+    }).then(() => {
+      clearCart();
+      navigate("/menu");
+    });
   };
 
   if (items.length === 0) {
