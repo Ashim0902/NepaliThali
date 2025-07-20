@@ -39,7 +39,7 @@ const HeroSection = () => {
             </div>
 
             <Link to="/menu">
-              <button className="cursor-pointer group bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold rounded-xl px-6 py-3 shadow-lg hover:from-orange-600 hover:to-red-700 transition-all duration-300 uppercase tracking-wide flex items-center gap-2">
+              <button className="mb-4 sm:mb-0 cursor-pointer group bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold rounded-xl px-6 py-3 shadow-lg hover:from-orange-600 hover:to-red-700 transition-all duration-300 uppercase tracking-wide flex items-center gap-2">
                 Order Now
                 <ArrowRight
                   size={20}
