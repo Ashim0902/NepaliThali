@@ -1,4 +1,3 @@
-// src/components/CheckoutModal.jsx
 import React, { useState } from "react";
 import { CreditCard, Truck, MapPin, Phone, User, X } from "lucide-react";
 import Swal from "sweetalert2";
@@ -163,7 +162,7 @@ const CheckoutModal = ({
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-                      placeholder="your@email.com"
+                      placeholder="your@gmail.com"
                       disabled={isProcessing}
                     />
                   </div>
@@ -184,7 +183,7 @@ const CheckoutModal = ({
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-                      placeholder="98XXXXXXXX"
+                      placeholder="9800000000"
                       disabled={isProcessing}
                     />
                   </div>
@@ -251,7 +250,6 @@ const CheckoutModal = ({
                 </div>
               </div>
 
-              {/* Payment Method */}
               <div className="rounded-2xl p-6 border">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
                   <CreditCard className="w-6 h-6 text-orange-500" />
@@ -288,7 +286,6 @@ const CheckoutModal = ({
               </div>
             </div>
 
-            {/* Order Summary */}
             <div className="lg:w-1/3 mt-8 lg:mt-0">
               <div className="rounded-2xl p-6 border sticky top-6 max-h-[70vh] overflow-y-auto">
                 <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
