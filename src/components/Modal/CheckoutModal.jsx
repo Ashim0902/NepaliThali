@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// src/components/CheckoutModal.jsx
+import React, { useState } from "react";
+import { CreditCard, Truck, MapPin, Phone, User, X } from "lucide-react";
 import Swal from "sweetalert2";
-import { useCart } from "../context/CartContext";
-import {
-  CreditCard,
-  Truck,
-  MapPin,
-  Phone,
-  User,
-  ArrowLeft,
-} from "lucide-react";
 
-const CheckoutPage = () => {
-  const navigate = useNavigate();
-  const { items, totalPrice, clearCart } = useCart();
-
+const CheckoutModal = ({
+  isOpen,
+  onClose,
+  cartItems,
+  totalPrice,
+  clearCart,
+}) => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -26,19 +21,17 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  if (!isOpen) return null;
+
   const deliveryFee = totalPrice > 300 ? 0 : 30;
   const total = totalPrice + deliveryFee;
 
-  useEffect(() => {
-    console.log("Cart items:", items);
-  }, [items]);
-
-  function handleInputChange(e) {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  }
+  };
 
-  async function handlePlaceOrder(e) {
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
 
     if (
@@ -56,7 +49,7 @@ const CheckoutPage = () => {
       return;
     }
 
-    if (items.length === 0) {
+    if (cartItems.length === 0) {
       Swal.fire({
         icon: "warning",
         title: "Your cart is empty",
@@ -79,35 +72,44 @@ const CheckoutPage = () => {
         confirmButtonColor: "#f97316",
       });
 
-      navigate("/");
-    } catch {
+      onClose();
+
+      // Reset form
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        city: "",
+        address: "",
+        notes: "",
+      });
+      setPaymentMethod("cod");
+    } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Something went wrong. Please try again.",
       });
+    } finally {
       setIsProcessing(false);
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen p-4 pt-24 text-black">
-      <div className="max-w-6xl mx-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-start overflow-auto z-50 pt-20 px-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl p-6 relative">
         <button
-          onClick={() => navigate("/cart")}
-          className="mb-6 flex items-center gap-2 text-orange-600 hover:text-orange-800 transition-colors"
-          type="button"
+          onClick={() => !isProcessing && onClose()}
+          disabled={isProcessing}
+          className="absolute top-8 right-10 p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Close checkout"
+          aria-label="Close checkout modal"
         >
-          <ArrowLeft className="w-5 h-5" />
-          Back to Cart
+          <X className="w-5 h-5" />
         </button>
 
-        <form
-          onSubmit={handlePlaceOrder}
-          className="bg-white rounded-3xl shadow-2xl overflow-hidden"
-          noValidate
-        >
-          <div className="bg-orange-500 text-white p-6">
+        <form onSubmit={handlePlaceOrder} noValidate>
+          <div className="bg-orange-500 text-white p-6 rounded-t-3xl mb-6">
             <h1 className="text-3xl font-bold flex items-center gap-3">
               <CreditCard className="w-8 h-8" />
               Checkout
@@ -115,8 +117,10 @@ const CheckoutPage = () => {
             <p className="mt-2">Complete your order details</p>
           </div>
 
-          <div className="lg:flex lg:gap-8 p-6">
+          <div className="lg:flex lg:gap-8">
+            {/* Left Section */}
             <div className="lg:w-2/3 space-y-8">
+              {/* Delivery Info */}
               <div className="rounded-2xl p-6 border">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
                   <Truck className="w-6 h-6 text-orange-500" />
@@ -141,6 +145,7 @@ const CheckoutPage = () => {
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                       placeholder="Enter your full name"
+                      disabled={isProcessing}
                     />
                   </div>
                   <div>
@@ -159,6 +164,7 @@ const CheckoutPage = () => {
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                       placeholder="your@email.com"
+                      disabled={isProcessing}
                     />
                   </div>
 
@@ -179,6 +185,7 @@ const CheckoutPage = () => {
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                       placeholder="98XXXXXXXX"
+                      disabled={isProcessing}
                     />
                   </div>
 
@@ -198,6 +205,7 @@ const CheckoutPage = () => {
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                       placeholder="Your city"
+                      disabled={isProcessing}
                     />
                   </div>
 
@@ -218,6 +226,7 @@ const CheckoutPage = () => {
                       rows={3}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl resize-none"
                       placeholder="Street address, building, apartment, etc."
+                      disabled={isProcessing}
                     />
                   </div>
 
@@ -236,11 +245,13 @@ const CheckoutPage = () => {
                       rows={3}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl resize-none"
                       placeholder="Special instructions..."
+                      disabled={isProcessing}
                     />
                   </div>
                 </div>
               </div>
 
+              {/* Payment Method */}
               <div className="rounded-2xl p-6 border">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
                   <CreditCard className="w-6 h-6 text-orange-500" />
@@ -256,6 +267,7 @@ const CheckoutPage = () => {
                     onChange={() => setPaymentMethod("cod")}
                     className="w-5 h-5"
                     required
+                    disabled={isProcessing}
                   />
                   <span className="font-medium">Cash on Delivery</span>
                 </label>
@@ -276,16 +288,16 @@ const CheckoutPage = () => {
               </div>
             </div>
 
+            {/* Order Summary */}
             <div className="lg:w-1/3 mt-8 lg:mt-0">
-              <div className="rounded-2xl p-6 border sticky top-6">
+              <div className="rounded-2xl p-6 border sticky top-6 max-h-[70vh] overflow-y-auto">
                 <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
 
                 <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
-                  {items.length === 0 && (
+                  {cartItems.length === 0 && (
                     <p className="text-gray-500">Your cart is empty.</p>
                   )}
-
-                  {items.map((item) => (
+                  {cartItems.map((item) => (
                     <div key={item.id} className="flex gap-3">
                       <img
                         src={item.image}
@@ -300,10 +312,8 @@ const CheckoutPage = () => {
                         </p>
                         <p className="text-sm font-semibold text-orange-600">
                           Rs.{" "}
-                          {(
-                            (item.price ?? item.caloriesPerServing ?? 0) *
-                            item.quantity
-                          ).toFixed(2)}
+                          {(item.price ?? item.caloriesPerServing ?? 0) *
+                            item.quantity}
                         </p>
                       </div>
                     </div>
@@ -315,15 +325,28 @@ const CheckoutPage = () => {
                     <span>Subtotal:</span>
                     <span>Rs. {totalPrice.toFixed(2)}</span>
                   </div>
+
                   <div className="flex justify-between text-gray-600">
                     <span>Delivery Fee:</span>
-                    <span>Rs. {deliveryFee.toFixed(2)}</span>
+                    {deliveryFee === 0 ? (
+                      <span className="line-through text-red-600">
+                        Rs. 30.00
+                      </span>
+                    ) : (
+                      <span>Rs. 30.00</span>
+                    )}
                   </div>
 
                   {deliveryFee === 0 && (
-                    <p className="text-green-600 text-sm font-medium mt-1">
-                      Delivery fee waived! Discount applied.
-                    </p>
+                    <>
+                      <p className="text-green-600 text-sm font-medium mt-1">
+                        Delivery fee waived! Discount applied.
+                      </p>
+                      <div className="flex justify-between text-gray-600">
+                        <span>Discount:</span>
+                        <span className="text-red-600">Rs. 30.00</span>
+                      </div>
+                    </>
                   )}
 
                   <div className="border-t pt-3">
@@ -367,4 +390,4 @@ const CheckoutPage = () => {
   );
 };
 
-export default CheckoutPage;
+export default CheckoutModal;

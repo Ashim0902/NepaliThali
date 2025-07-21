@@ -9,8 +9,9 @@ import {
   Star,
   CreditCard,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ConfirmModal from "../components/Modal/ConfirmModal";
+import CheckoutModal from "../components/Modal/CheckoutModal";
 
 const CartPage = () => {
   const {
@@ -22,8 +23,6 @@ const CartPage = () => {
     totalItems,
   } = useCart();
 
-  const navigate = useNavigate();
-
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: "",
@@ -31,6 +30,8 @@ const CartPage = () => {
     onConfirm: () => {},
     type: "warning",
   });
+
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const handleQuantityDecrease = (item) => {
     if (item.quantity === 1) {
@@ -67,11 +68,15 @@ const CartPage = () => {
   };
 
   const handleCheckout = () => {
-    navigate("/checkout");
+    setIsCheckoutOpen(true);
   };
 
   const closeModal = () => {
     setConfirmModal({ ...confirmModal, isOpen: false });
+  };
+
+  const closeCheckoutModal = () => {
+    setIsCheckoutOpen(false);
   };
 
   if (items.length === 0) {
@@ -132,7 +137,6 @@ const CartPage = () => {
                     alt={item.name}
                     className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
                   />
-
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-800 truncate">
                       {item.name}
@@ -258,6 +262,14 @@ const CartPage = () => {
         type={confirmModal.type}
         confirmText={confirmModal.type === "danger" ? "Delete" : "Remove"}
         cancelText="Cancel"
+      />
+
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={closeCheckoutModal}
+        cartItems={items}
+        totalPrice={totalPrice}
+        clearCart={clearCart}
       />
     </div>
   );

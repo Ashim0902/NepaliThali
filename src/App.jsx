@@ -17,7 +17,6 @@ import ContactPage from "./pages/ContactPage";
 import { CartProvider } from "./context/CartContext";
 import { scrollToTopInstant } from "./utils/scrollToTop";
 import { SearchProvider } from "./context/SearchContext";
-import CheckoutPage from "./pages/CheckoutPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -71,7 +70,6 @@ function App() {
                 />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/menu" element={<MenuPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/contact" element={<ContactPage />} />
               </Routes>
