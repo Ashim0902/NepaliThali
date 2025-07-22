@@ -17,6 +17,8 @@ const CheckoutModal = ({
     address: "",
     notes: "",
   });
+
+  const [errors, setErrors] = useState({});
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -25,28 +27,74 @@ const CheckoutModal = ({
   const deliveryFee = totalPrice > 300 ? 0 : 30;
   const total = totalPrice + deliveryFee;
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^9\d{9}$/;
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+
+      if (name === "email") {
+        if (value && !emailRegex.test(value)) {
+          newErrors.email = "Invalid email address";
+        } else {
+          delete newErrors.email;
+        }
+      } else if (name === "phone") {
+        if (!phoneRegex.test(value)) {
+          newErrors.phone =
+            "Invalid phone number. Should be 10 digits starting with 9";
+        } else {
+          delete newErrors.phone;
+        }
+      } else if (name === "fullName") {
+        if (value.trim() === "") {
+          newErrors.fullName = "Full name is required";
+        } else {
+          delete newErrors.fullName;
+        }
+      } else if (name === "city") {
+        if (value.trim() === "") {
+          newErrors.city = "City is required";
+        } else {
+          delete newErrors.city;
+        }
+      } else if (name === "address") {
+        if (value.trim() === "") {
+          newErrors.address = "Address is required";
+        } else {
+          delete newErrors.address;
+        }
+      }
+
+      return newErrors;
+    });
+  };
+
+  const validateAll = () => {
+    const newErrors = {};
+
+    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
+    if (!emailRegex.test(formData.email))
+      newErrors.email = "Invalid email address";
+    if (!phoneRegex.test(formData.phone))
+      newErrors.phone =
+        "Invalid phone number. Should be 10 digits starting with 9";
+    if (!formData.city.trim()) newErrors.city = "City is required";
+    if (!formData.address.trim()) newErrors.address = "Address is required";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.fullName ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.city ||
-      !formData.address
-    ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Please fill all required fields",
-        confirmButtonColor: "#f97316",
-      });
-      return;
-    }
+    if (!validateAll()) return;
 
     if (cartItems.length === 0) {
       Swal.fire({
@@ -73,7 +121,6 @@ const CheckoutModal = ({
 
       onClose();
 
-      // Reset form
       setFormData({
         fullName: "",
         email: "",
@@ -82,6 +129,7 @@ const CheckoutModal = ({
         address: "",
         notes: "",
       });
+      setErrors({});
       setPaymentMethod("cod");
     } catch (error) {
       Swal.fire({
@@ -117,9 +165,7 @@ const CheckoutModal = ({
           </div>
 
           <div className="lg:flex lg:gap-8">
-            {/* Left Section */}
             <div className="lg:w-2/3 space-y-8">
-              {/* Delivery Info */}
               <div className="rounded-2xl p-6 border">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
                   <Truck className="w-6 h-6 text-orange-500" />
@@ -127,6 +173,7 @@ const CheckoutModal = ({
                 </h2>
 
                 <div className="grid md:grid-cols-2 gap-4">
+                  {/* Full Name */}
                   <div>
                     <label
                       htmlFor="fullName"
@@ -142,11 +189,22 @@ const CheckoutModal = ({
                       value={formData.fullName}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      className={`w-full px-4 py-3 border rounded-xl ${
+                        errors.fullName
+                          ? "border-red-500 focus:border-red-600"
+                          : "border-gray-300"
+                      }`}
                       placeholder="Enter your full name"
                       disabled={isProcessing}
                     />
+                    {errors.fullName && (
+                      <p className="text-red-600 text-xs mt-1">
+                        {errors.fullName}
+                      </p>
+                    )}
                   </div>
+
+                  {/* Email */}
                   <div>
                     <label
                       htmlFor="email"
@@ -161,12 +219,22 @@ const CheckoutModal = ({
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      className={`w-full px-4 py-3 border rounded-xl ${
+                        errors.email
+                          ? "border-red-500 focus:border-red-600"
+                          : "border-gray-300"
+                      }`}
                       placeholder="your@gmail.com"
                       disabled={isProcessing}
                     />
+                    {errors.email && (
+                      <p className="text-red-600 text-xs mt-1">
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
 
+                  {/* Phone */}
                   <div>
                     <label
                       htmlFor="phone"
@@ -182,12 +250,22 @@ const CheckoutModal = ({
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      className={`w-full px-4 py-3 border rounded-xl ${
+                        errors.phone
+                          ? "border-red-500 focus:border-red-600"
+                          : "border-gray-300"
+                      }`}
                       placeholder="9800000000"
                       disabled={isProcessing}
                     />
+                    {errors.phone && (
+                      <p className="text-red-600 text-xs mt-1">
+                        {errors.phone}
+                      </p>
+                    )}
                   </div>
 
+                  {/* City */}
                   <div>
                     <label
                       htmlFor="city"
@@ -202,12 +280,20 @@ const CheckoutModal = ({
                       value={formData.city}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      className={`w-full px-4 py-3 border rounded-xl ${
+                        errors.city
+                          ? "border-red-500 focus:border-red-600"
+                          : "border-gray-300"
+                      }`}
                       placeholder="Your city"
                       disabled={isProcessing}
                     />
+                    {errors.city && (
+                      <p className="text-red-600 text-xs mt-1">{errors.city}</p>
+                    )}
                   </div>
 
+                  {/* Address */}
                   <div>
                     <label
                       htmlFor="address"
@@ -223,12 +309,22 @@ const CheckoutModal = ({
                       onChange={handleInputChange}
                       required
                       rows={3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl resize-none"
+                      className={`w-full px-4 py-3 border rounded-xl resize-none ${
+                        errors.address
+                          ? "border-red-500 focus:border-red-600"
+                          : "border-gray-300"
+                      }`}
                       placeholder="Street address, building, apartment, etc."
                       disabled={isProcessing}
                     />
+                    {errors.address && (
+                      <p className="text-red-600 text-xs mt-1">
+                        {errors.address}
+                      </p>
+                    )}
                   </div>
 
+                  {/* Notes */}
                   <div>
                     <label
                       htmlFor="notes"
@@ -250,6 +346,7 @@ const CheckoutModal = ({
                 </div>
               </div>
 
+              {/* Payment Method */}
               <div className="rounded-2xl p-6 border">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
                   <CreditCard className="w-6 h-6 text-orange-500" />
@@ -286,10 +383,10 @@ const CheckoutModal = ({
               </div>
             </div>
 
+            {/* Order Summary */}
             <div className="lg:w-1/3 mt-8 lg:mt-0">
               <div className="rounded-2xl p-6 border sticky top-6 max-h-[70vh] overflow-y-auto">
                 <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
-
                 <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
                   {cartItems.length === 0 && (
                     <p className="text-gray-500">Your cart is empty.</p>
@@ -322,7 +419,6 @@ const CheckoutModal = ({
                     <span>Subtotal:</span>
                     <span>Rs. {totalPrice.toFixed(2)}</span>
                   </div>
-
                   <div className="flex justify-between text-gray-600">
                     <span>Delivery Fee:</span>
                     {deliveryFee === 0 ? (
