@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CreditCard, Truck, MapPin, Phone, User, X } from "lucide-react";
 import Swal from "sweetalert2";
+import "../../scrollbar.css";
 
 const CheckoutModal = ({
   isOpen,
@@ -143,7 +144,7 @@ const CheckoutModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-start overflow-auto z-50 pt-20 px-4">
+    <div className="fixed -mt-10 inset-0 bg-black bg-opacity-60 flex justify-center items-start overflow-auto z-50 pt-20 px-4 scrollbar-hide">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl p-6 relative">
         <button
           onClick={() => !isProcessing && onClose()}
@@ -173,7 +174,6 @@ const CheckoutModal = ({
                 </h2>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  {/* Full Name */}
                   <div>
                     <label
                       htmlFor="fullName"
@@ -204,7 +204,6 @@ const CheckoutModal = ({
                     )}
                   </div>
 
-                  {/* Email */}
                   <div>
                     <label
                       htmlFor="email"
@@ -234,7 +233,6 @@ const CheckoutModal = ({
                     )}
                   </div>
 
-                  {/* Phone */}
                   <div>
                     <label
                       htmlFor="phone"
@@ -265,7 +263,6 @@ const CheckoutModal = ({
                     )}
                   </div>
 
-                  {/* City */}
                   <div>
                     <label
                       htmlFor="city"
@@ -293,7 +290,6 @@ const CheckoutModal = ({
                     )}
                   </div>
 
-                  {/* Address */}
                   <div>
                     <label
                       htmlFor="address"
@@ -324,7 +320,6 @@ const CheckoutModal = ({
                     )}
                   </div>
 
-                  {/* Notes */}
                   <div>
                     <label
                       htmlFor="notes"
@@ -346,7 +341,6 @@ const CheckoutModal = ({
                 </div>
               </div>
 
-              {/* Payment Method */}
               <div className="rounded-2xl p-6 border">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
                   <CreditCard className="w-6 h-6 text-orange-500" />
@@ -383,11 +377,10 @@ const CheckoutModal = ({
               </div>
             </div>
 
-            {/* Order Summary */}
             <div className="lg:w-1/3 mt-8 lg:mt-0">
-              <div className="rounded-2xl p-6 border sticky top-6 max-h-[70vh] overflow-y-auto">
+              <div className="rounded-2xl p-6 border sticky top-6 max-h-[70vh] overflow-y-auto scrollbar-hide">
                 <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
-                <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
+                <div className="space-y-4 mb-6 max-h-64 overflow-y-auto scrollbar-hide">
                   {cartItems.length === 0 && (
                     <p className="text-gray-500">Your cart is empty.</p>
                   )}
