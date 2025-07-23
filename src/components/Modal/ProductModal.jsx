@@ -52,7 +52,7 @@ const ProductModal = ({ data, setShowModal }) => {
           </button>
           <div className="absolute bottom-4 left-4">
             <span className="bg-orange-500 text-white text-sm px-3 py-1 rounded-full font-semibold">
-              {data.tags[0]}
+              {data.tags && data.tags[0]}
             </span>
           </div>
         </div>
@@ -82,7 +82,7 @@ const ProductModal = ({ data, setShowModal }) => {
             <div className="flex items-center gap-2 text-gray-600">
               <Users size={16} className="text-orange-500" />
               <span className="text-sm">
-                Meal Type: {data.mealType.join(", ")}
+                Meal Type: {data.mealType && data.mealType.join(", ")}
               </span>
             </div>
             {data.servings && (
@@ -102,14 +102,15 @@ const ProductModal = ({ data, setShowModal }) => {
           <div>
             <h3 className="font-semibold text-gray-800 mb-2">Ingredients:</h3>
             <div className="flex flex-wrap gap-2">
-              {data.ingredients.map((ingredient, index) => (
-                <span
-                  key={index}
-                  className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
-                >
-                  {ingredient}
-                </span>
-              ))}
+              {data.ingredients &&
+                data.ingredients.map((ingredient, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                  >
+                    {ingredient}
+                  </span>
+                ))}
             </div>
           </div>
 

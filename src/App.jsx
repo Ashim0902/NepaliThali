@@ -30,13 +30,12 @@ const ScrollToTop = () => {
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const handleRightClick = (e) => e.preventDefault();
-
     document.addEventListener("contextmenu", handleRightClick);
-
     return () => {
       document.removeEventListener("contextmenu", handleRightClick);
     };
@@ -44,6 +43,11 @@ function App() {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    setSearchQuery(""); // Clear search when changing category
   };
 
   return (
@@ -60,9 +64,13 @@ function App() {
                   element={
                     <>
                       <HeroSection />
-                      <Categories />
+                      <Categories
+                        onCategorySelect={handleCategorySelect}
+                        selectedCategory={selectedCategory}
+                      />
                       <Product
                         searchQuery={searchQuery}
+                        selectedCategory={selectedCategory}
                         onProductsLoad={setProducts}
                       />
                     </>

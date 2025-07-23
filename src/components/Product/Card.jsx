@@ -20,7 +20,7 @@ const Card = ({ data }) => {
           />
           <div className="absolute top-3 left-3 z-10">
             <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-semibold uppercase tracking-wide">
-              {data.tags[0]}
+              {data.tags && data.tags[0]}
             </span>
           </div>
         </div>
@@ -28,7 +28,7 @@ const Card = ({ data }) => {
         <div className="p-4 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs text-orange-500 uppercase font-semibold tracking-wide">
-              {data.mealType[0]}
+              {data.mealType && data.mealType[0]}
             </span>
             <div className="flex items-center gap-1 text-xs text-gray-500">
               <Clock size={12} />

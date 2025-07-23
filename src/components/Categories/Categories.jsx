@@ -1,27 +1,51 @@
 import React from "react";
 
-const icons = [
-  { name: "All", src: "./Icons/pizza.png" },
-  { name: "Fast-Food", src: "./Icons/hamburger.png" },
-  { name: "Sweets", src: "./Icons/ice-cream.png" },
-  { name: "Spicy", src: "./Icons/noodle.png" },
-  { name: "Drinks", src: "./Icons/drink.png" },
+const categories = [
+  { name: "All", src: "/Icons/pizza.png" },
+  { name: "Breakfast", src: "/Icons/hamburger.png" },
+  { name: "Lunch", src: "/Icons/noodle.png" },
+  { name: "Dinner", src: "/Icons/ice-cream.png" },
+  { name: "Snacks", src: "/Icons/drink.png" },
+  { name: "Dessert", src: "/Icons/drink.png" },
+  { name: "Beverages", src: "/Icons/drink.png" },
+  { name: "Vegetarian", src: "/Icons/drink.png" },
 ];
 
-const Categories = () => {
+const Categories = ({ onCategorySelect, selectedCategory = "All" }) => {
+  const handleClick = (categoryName) => {
+    onCategorySelect(categoryName);
+  };
+
   return (
-    <div className="my-4 mx-3 md:mx-8">
-      <div className="text-black font-bold md:text-3xl">Categories</div>
-      <div className="w-fit flex gap-7 md:gap-16 lg:gap-28 mx-auto my-4 ">
-        {icons.map((item) => (
+    <div className="my-8 mx-3 md:mx-8">
+      <div className="text-black font-bold text-2xl md:text-3xl mb-6">
+        Categories
+      </div>
+      <div className="flex flex-wrap gap-4 md:gap-6 justify-center">
+        {categories.map((category) => (
           <div
-            className="flex flex-col items-center gap-2 cursor-pointer text-gray-700 font-medium hover:text-black"
-            key={item.name}
+            key={category.name}
+            className={`flex flex-col items-center gap-2 cursor-pointer font-medium transition-all duration-300 p-3 rounded-xl ${
+              selectedCategory === category.name
+                ? "text-orange-600 bg-orange-50 shadow-md"
+                : "text-gray-700 hover:text-orange-600 hover:bg-orange-50"
+            }`}
+            onClick={() => handleClick(category.name)}
           >
-            <div className="bg-gray-300 border-gray-300 rounded-full p-1 hover:border-gray-700 hover:bg-gray-700 transition-all duration-300">
-              <img src={item.src} alt="" className="h-7 w-7 md:h-11 md:w-11 " />
+            <div
+              className={`rounded-full p-3 transition-all duration-300 ${
+                selectedCategory === category.name
+                  ? "bg-orange-500 shadow-lg transform scale-110"
+                  : "bg-gray-200 hover:bg-orange-400 hover:shadow-md"
+              }`}
+            >
+              <img
+                src={category.src}
+                alt={category.name}
+                className="w-8 h-8 object-contain"
+              />
             </div>
-            <p className=" p-0 m-0 text-xs sm:text-sm">{item.name}</p>
+            <p className="text-xs sm:text-sm font-semibold">{category.name}</p>
           </div>
         ))}
       </div>
